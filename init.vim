@@ -58,7 +58,10 @@ Plug 'ekalinin/Dockerfile.vim'
 
 " Python syntax 
 Plug 'hdima/python-syntax'
+
+"https://github.com/python-mode/python-mode
 Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
+
 
 " NGINX syntax
 Plug 'chr4/nginx.vim'
@@ -89,10 +92,6 @@ Plug 'roxma/nvim-yarp'
 
 Plug 'ncm2/ncm2-bufword'
 Plug 'ncm2/ncm2-path'
-
-"Pymode
-"https://github.com/python-mode/python-mode
-Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
 
 call plug#end()
 
