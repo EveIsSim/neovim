@@ -41,27 +41,29 @@ set signcolumn=yes
 "Plugins here
 call plug#begin('~/.config/nvim/plugged')
 
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'Valloric/YouCompleteMe'
 
-" Autocomplite current values
-Plug 'ycm-core/YouCompleteMe'
-Plug 'jiangmiao/auto-pairs'
-Plug 'mitsuhiko/vim-jinja'
-Plug 'rust-lang/rust.vim'
-Plug 'ryanoasis/vim-devicons'
+" NERDTreeToggle + git
+" Documentation https://github.com/Xuyuanp/nerdtree-git-plugin
+Plug 'preservim/nerdtree' |
+            \ Plug 'Xuyuanp/nerdtree-git-plugin' |
+            \ Plug 'ryanoasis/vim-devicons'
+
 Plug 'majutsushi/tagbar'
+Plug 'rust-lang/rust.vim'
+Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-surround'
 Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
+Plug 'jmcantrell/vim-virtualenv'
+Plug 'davidhalter/jedi-vim'
+Plug 'mitsuhiko/vim-jinja'
 
 " syntax dockerfile
 Plug 'ekalinin/Dockerfile.vim'
 
 " Python syntax 
 Plug 'hdima/python-syntax'
-
-"https://github.com/python-mode/python-mode
 Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
-
 
 " NGINX syntax
 Plug 'chr4/nginx.vim'
@@ -73,17 +75,9 @@ Plug 'airblade/vim-gitgutter'
 " Find folder
 Plug 'kien/ctrlp.vim'
 
-" Colorschemes
-Plug 'morhetz/gruvbox'
-Plug 'blueshirts/darcula'
-Plug 'iCyMind/NeoSolarized'
-Plug 'ayu-theme/ayu-vim'
-
 " Airline
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-
-Plug 'jmcantrell/vim-virtualenv'
 
 " completion-manager
 " https://github.com/ncm2/ncm2
@@ -93,17 +87,35 @@ Plug 'roxma/nvim-yarp'
 Plug 'ncm2/ncm2-bufword'
 Plug 'ncm2/ncm2-path'
 
+"searching plugin + nedd also install ack for your machine
+"https://vimawesome.com/plugin/ack-vim
+Plug 'mileszs/ack.vim'
+
+
+" NERDTreeToggle + git
+" Documentation https://github.com/Xuyuanp/nerdtree-git-plugin
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+
+"need install also on your machine 
+"https://github.com/junegunn/fzf
+Plug 'junegunn/fzf'
+
+" Colorschemes
+Plug 'morhetz/gruvbox'
+Plug 'blueshirts/darcula'
+Plug 'iCyMind/NeoSolarized'
+Plug 'dracula/vim', { 'as': 'dracula'  }
+Plug 'sainnhe/edge'
+
 call plug#end()
-
-
-" colorscheme
-set termguicolors
-colorscheme NeoSolarized 
-set background=dark
 
 
 " mappings
 map <C-n> :NERDTreeToggle<CR>
+
 
 map <silent> <C-h> :call WinMove('h')<CR>
 map <silent> <C-j> :call WinMove('j')<CR>
@@ -124,6 +136,12 @@ function! WinMove(key)
 endfunction
 
 
+" colorscheme
+set termguicolors
+colorscheme NeoSolarized
+set background=dark
+
+
  "=====================================================
  " Airline settings
  "=====================================================
@@ -134,15 +152,11 @@ endfunction
  let g:airline_skip_empty_sections = 1
  let g:airline#extensions#tabline#enabled = 1
  let g:airline#extensions#tabline#tab_nr_type = 1
- " let g:airline#extensions#tabline#show_tab_nr = 1
  let g:airline#extensions#tabline#show_close_button = 0
  let g:airline#extensions#ale#enabled = 1
  let g:airline#extensions#tagbar#enabled = 1
  let g:airline#extensions#tabline#buffer_idx_mode = 1
- " let g:airline#extensions#tabline#show_splits = 0
- " let g:airline#extensions#tabline#formatter = 'unique_tail'
  let g:airline#extensions#tabline#left_sep = ' '
-" let g:airline#extensions#tabline#left_alt_sep = '|'
 
 "====================================================
 "Python syntax
@@ -165,13 +179,6 @@ let g:ycm_autoclose_preview_window_after_completion=1
 let g:deoplete#auto_complete_delay = 100
 
 
-"if 'VIRTUAL_ENV' in os.environ:
-"  project_base_dir = os.environ['VIRTUAL_ENV']
-"  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
-"  execfile(activate_this, dict(__file__=activate_this))
-"endif
-"
-
 "=====================================================
 " Tagbar settings
 "=====================================================
@@ -180,13 +187,6 @@ let g:tagbar_sort = 0 "tagbar shows tags in order of they created in file
 let g:tagbar_foldlevel = 0 "close tagbar folds by default
 
 nmap  <F8> : TagbarToggle <CR>
-
-
-"====================================================
-"python hosts
-"====================================================
-let g:python_host_prog='/usr/bin/python2'
-let g:python3_host_prog='/usr/bin/python3'
 
 
 "====================================================
@@ -211,3 +211,59 @@ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 " https://github.com/preservim/nerdcommenter/issues/278
 let g:NERDSpaceDelims = 1
 
+"====================================================
+"Nerd git settings
+"===================================================
+let g:WebDevIconsNerdTreeGitPluginForceVAlign = 1
+let g:NERDTreeUseSimpleIndicator = 1
+let g:NERDTreeGitStatusConcealBrackets = 1 " hide the boring brackets([ ])?
+
+
+"=====================================================
+" LanguageClient settings
+"=====================================================
+set hidden
+
+let g:LanguageClient_serverCommands = {
+    \ 'python': ['/eveissim/.local/bin/pyls'],
+    \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'], 
+    \ }
+let g:LanguageClient_selectionUI = 'fzf'
+" note that if you are using Plug mapping you should not use `noremap` mappings.
+nmap <F5> <Plug>(lcn-menu)
+" Or map each action separately
+nmap <silent>K <Plug>(lcn-hover)
+nmap <silent> gd <Plug>(lcn-definition)
+nmap <silent> <F2> <Plug>(lcn-rename)
+
+"=====================================================================================================
+" Default value is "normal", Setting this option to "high" or "low" does use the
+" same Solarized palette but simply shifts some values up or down in order to
+" expand or compress the tonal range displayed.
+let g:neosolarized_contrast = "normal"
+
+" Special characters such as trailing whitespace, tabs, newlines, when displayed
+" using ":set list" can be set to one of three levels depending on your needs.
+" Default value is "normal". Provide "high" and "low" options.
+let g:neosolarized_visibility = "normal"
+
+" I make vertSplitBar a transparent background color. If you like the origin
+" solarized vertSplitBar style more, set this value to 0.
+let g:neosolarized_vertSplitBgTrans = 1
+
+" If you wish to enable/disable NeoSolarized from displaying bold, underlined
+" or italicized" typefaces, simply assign 1 or 0 to the appropriate variable.
+" Default values:
+let g:neosolarized_bold = 1
+let g:neosolarized_underline = 1
+let g:neosolarized_italic = 0
+
+" Used to enable/disable "bold as bright" in Neovim terminal. If colors of bold
+" text output by commands like `ls` aren't what you expect, you might want to
+" try disabling this option. Default value:
+let g:neosolarized_termBoldAsBright = 1
+
+
+
+
+" If you want find anything plugin then go https://vimawesome.com/?q=cat%3Acompletion
