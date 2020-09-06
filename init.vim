@@ -38,10 +38,14 @@ set ls=2 " Always show status line
 " Always draw the signcolumn.
 set signcolumn=yes
 
+
+" python hosts
+let g:python_host_prog='/usr/bin/python2'
+let g:python3_host_prog='/usr/bin/python3'
+
+
 "Plugins here
 call plug#begin('~/.config/nvim/plugged')
-
-Plug 'Valloric/YouCompleteMe'
 
 " NERDTreeToggle + git
 " Documentation https://github.com/Xuyuanp/nerdtree-git-plugin
@@ -57,6 +61,8 @@ Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
 Plug 'jmcantrell/vim-virtualenv'
 Plug 'davidhalter/jedi-vim'
 Plug 'mitsuhiko/vim-jinja'
+
+Plug 'nvim-lua/completion-nvim'
 
 " syntax dockerfile
 Plug 'ekalinin/Dockerfile.vim'
@@ -225,7 +231,7 @@ let g:NERDTreeGitStatusConcealBrackets = 1 " hide the boring brackets([ ])?
 set hidden
 
 let g:LanguageClient_serverCommands = {
-    \ 'python': ['/eveissim/.local/bin/pyls'],
+    \ 'python': ['~/.local/bin/pyls'],
     \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'], 
     \ }
 let g:LanguageClient_selectionUI = 'fzf'
@@ -262,8 +268,6 @@ let g:neosolarized_italic = 0
 " text output by commands like `ls` aren't what you expect, you might want to
 " try disabling this option. Default value:
 let g:neosolarized_termBoldAsBright = 1
-
-
 
 
 " If you want find anything plugin then go https://vimawesome.com/?q=cat%3Acompletion
